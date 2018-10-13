@@ -67,6 +67,7 @@ class WheelEntry extends ConveyorSlot
 	constructor()
 	{
 		base.constructor( ::fe.add_artwork( my_config["orbit_art"] ) );
+		preserve_aspect_ratio = true;
 	}
 
 	function on_progress( progress, var )
