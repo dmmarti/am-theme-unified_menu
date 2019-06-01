@@ -14,7 +14,8 @@ class UserConfig {
 </ label="--------   Pointer images    --------", help="Change pointer image", order=18 /> uct4="select below";
    </ label="Select pointer", help="Select animated pointer", options="none", order=19 /> enable_pointer="none"; 
 </ label="--------    Miscellaneous    --------", help="Miscellaneous options", order=23 /> uct6="select below";
-   </ label="Enable monitor static effect", help="Show static effect when snap is null", options="Yes,No", order=24 /> enable_static="No";    
+   </ label="Enable monitor static effect", help="Show static effect when snap is null", options="Yes,No", order=24 /> enable_static="No";
+   </ label="Random Wheel Sounds", help="Play random sounds when navigating games wheel", options="Yes,No", order=25 /> enable_random_sound="Yes";   
 }  
 
 local my_config = fe.get_config();
@@ -107,6 +108,24 @@ conveyor.transition_ms = 50;
 try { conveyor.transition_ms = my_config["transition_ms"].tointeger(); } catch ( e ) { }
 }
  
+// Play random sound when transitioning to next / previous game on wheel
+function sound_transitions(ttype, var, ttime) 
+{
+	if (my_config["enable_random_sound"] == "Yes")
+	{
+		local random_num = floor(((rand() % 1000 ) / 1000.0) * (124 - (1 - 1)) + 1);
+		local sound_name = "sounds/GS"+random_num+".mp3";
+		switch(ttype) 
+		{
+		case Transition.EndNavigation:		
+			local Wheelclick = fe.add_sound(sound_name);
+			Wheelclick.playing=true;
+			break;
+		}
+		return false;
+	}
+}
+fe.add_transition_callback("sound_transitions")
 
 ///////////////////////////////////////////////////////////////////////////////////
 // The following sets up which pointer to show on the wheel
